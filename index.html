@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bipin — Engineer & Builder</title>
+<meta name="description" content="Portfolio of Bipin — robotics, Python, and software engineer.">
+
+<!-- Fonts: JetBrains Mono (mono/display) + Fraunces (serif accent) + Manrope (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --bg-2: #0f1014;
+    --panel: #14151a;
+    --line: #1f2128;
+    --line-2: #2a2d36;
+    --ink: #e8e8ea;
+    --ink-dim: #9a9aa3;
+    --ink-faint: #5a5a64;
+    --accent: #c4ff3d;        /* electric lime */
+    --accent-2: #ff6b3d;      /* warm orange accent */
+    --accent-3: #6d8eff;      /* cool blue */
+    --grid: rgba(255,255,255,0.025);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Manrope', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtle grid backdrop */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>");
+    opacity: 0.04;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  .wrap { position: relative; z-index: 2; }
+
+  /* ====== NAV ====== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10,10,12,0.6);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .logo {
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--ink-dim); }
+
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a::before {
+    content: attr(data-num);
+    color: var(--ink-faint);
+    margin-right: 6px;
+    font-size: 11px;
+  }
+
+  .nav-status {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--ink-dim);
+  }
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ====== HERO ====== */
+  .hero {
+    min-height: 100vh;
+    padding: 140px 40px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    position: relative;
+  }
+
+  .hero-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+  .hero-meta span { display: flex; gap: 6px; }
+  .hero-meta b { color: var(--ink-dim); font-weight: 400; }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(56px, 11vw, 180px);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .hero-title .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 1.5px var(--ink);
+    color: transparent;
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: end;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+  }
+  @media (max-width: 720px) {
+    .hero-bottom { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    max-width: 460px;
+  }
+  .hero-tag .blink {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: -2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-self: end;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 720px) { .hero-cta { justify-self: start; } }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 14px 22px;
+    border: 1px solid var(--line-2);
+    background: transparent;
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--accent);
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+  .btn-primary:hover {
+    color: var(--bg);
+    box-shadow: 2px 2px 0 var(--ink);
+    border-color: var(--accent);
+  }
+  .btn .arrow {
+    transition: transform 0.2s;
+  }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* ====== ANIMATED REVEAL ====== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: reveal 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.25s; }
+  .delay-3 { animation-delay: 0.4s; }
+  .delay-4 { animation-delay: 0.6s; }
+  .delay-5 { animation-delay: 0.8s; }
+
+  /* ====== SECTION HEADERS ====== */
+  section { padding: 120px 40px; max-width: 1400px; margin: 0 auto; position: relative; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(44px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 60px;
+  }
+  .section-title em { font-style: italic; color: var(--ink-dim); font-weight: 300; }
+
+  /* ====== ABOUT ====== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+  }
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .about-text p {
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink-dim);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .about-text p .hl {
+    color: var(--ink);
+    background: linear-gradient(transparent 60%, rgba(196,255,61,0.18) 60%);
+    padding: 0 2px;
+  }
+
+  .about-card {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel) 0%, transparent 100%);
+    padding: 32px;
+    font-family: var(--mono);
+    font-size: 13px;
+    position: relative;
+  }
+  .about-card::before {
+    content: "// snapshot";
+    position: absolute;
+    top: -10px; left: 20px;
+    background: var(--bg);
+    padding: 0 10px;
+    color: var(--ink-faint);
+    font-size: 11px;
+  }
+  .about-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .about-row:last-child { border-bottom: none; }
+  .about-row .k { color: var(--ink-faint); }
+  .about-row .v { color: var(--ink); }
+  .about-row .v.lime { color: var(--accent); }
+
+  /* ====== PROJECTS ====== */
+  .projects {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .project {
+    display: grid;
+    grid-template-columns: 80px 1fr 280px 180px;
+    gap: 32px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+    transition: all 0.3s;
+    position: relative;
+    cursor: pointer;
+  }
+  .project::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(196,255,61,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .project:hover::before { opacity: 1; }
+  .project:hover .p-title { color: var(--accent); }
+  .project:hover .p-arrow { transform: translate(8px, -8px); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .project { grid-template-columns: 60px 1fr; gap: 16px; }
+    .project .p-stack, .project .p-arrow-cell { grid-column: 1 / -1; }
+  }
+
+  .p-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+
+  .p-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+    margin-bottom: 8px;
+  }
+  .p-desc {
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    max-width: 520px;
+  }
+
+  .p-stack {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+  }
+  .p-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-dim);
+    border-radius: 100px;
+  }
+
+  .p-arrow-cell {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 6px;
+  }
+  .p-arrow {
+    font-size: 28px;
+    color: var(--ink-faint);
+    transition: all 0.3s;
+    display: inline-block;
+    font-family: var(--mono);
+  }
+
+  /* ====== CONTACT ====== */
+  .contact {
+    background: linear-gradient(180deg, transparent, rgba(196,255,61,0.02));
+    border-top: 1px solid var(--line);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .contact-side .ascii {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--accent);
+    white-space: pre;
+    margin-bottom: 28px;
+    opacity: 0.7;
+  }
+  .contact-side p {
+    font-size: 18px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 420px;
+  }
+  .contact-direct {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  .contact-direct a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-2);
+    transition: all 0.2s;
+  }
+  .contact-direct a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .contact-direct div { margin-bottom: 8px; }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .field label .req { color: var(--accent); }
+  .field input,
+  .field textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-2);
+    padding: 10px 0;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field textarea { min-height: 100px; }
+
+  .form-status {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    min-height: 18px;
+  }
+
+  /* ====== FOOTER ====== */
+  footer {
+    padding: 32px 40px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  footer a { color: var(--ink-dim); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--accent); }
+  .foot-links { display: flex; gap: 24px; }
+
+  /* mobile nav */
+  @media (max-width: 720px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    section, .hero { padding-left: 20px; padding-right: 20px; }
+    footer { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============== NAV ============== -->
+  <nav>
+    <div class="logo">bipin<span>.dev</span></div>
+    <div class="nav-links">
+      <a href="#about" data-num="01">about</a>
+      <a href="#work" data-num="02">work</a>
+      <a href="#contact" data-num="03">contact</a>
+    </div>
+    <div class="nav-status">
+      <span class="pulse"></span>
+      <span>available for hire</span>
+    </div>
+  </nav>
+
+  <!-- ============== HERO ============== -->
+  <header class="hero">
+    <div class="hero-meta reveal delay-1">
+      <span><b>portfolio</b> / v.2026</span>
+      <span><b>focus</b> / robotics · python · systems</span>
+      <span><b>loc</b> / london, uk</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="reveal delay-2">building</span><br>
+      <span class="reveal delay-3 italic">things that</span><br>
+      <span class="reveal delay-4 outline">move &amp; think.</span>
+    </h1>
+
+    <div class="hero-bottom">
+      <p class="hero-tag reveal delay-4">
+        // engineer · learner · builder<br>
+        Currently working through ROS, Python, and<br>
+        anything that lets me ship something useful.<span class="blink"></span>
+      </p>
+      <div class="hero-cta reveal delay-5">
+        <a href="#work" class="btn btn-primary">
+          view work <span class="arrow">→</span>
+        </a>
+        <a href="#contact" class="btn">
+          get in touch <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== ABOUT ============== -->
+  <section id="about">
+    <div class="section-label">01 / about</div>
+    <h2 class="section-title">a brief <em>self-description.</em></h2>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm <span class="hl">Bipin</span> — an engineer drawn to the messy, hands-on intersection
+          of robotics and software. Most of my time goes into <span class="hl">ROS, Python, and the
+          occasional Ubuntu rabbit hole</span>, learning by shipping things that actually work
+          (and, more often, debugging why they don't).
+        </p>
+        <p>
+          I've been working with multi-robot swarms, custom message generation, launch files
+          that refuse to behave, and the kind of incremental wins that make engineering
+          feel worth it. On the side, I'm building out a deeper Python toolkit —
+          data analysis, automation, web — because tools compound.
+        </p>
+        <p>
+          I'm looking for a role where I can <span class="hl">build, break, and learn fast</span>
+          alongside people who care about the craft.
+        </p>
+      </div>
+
+      <aside class="about-card">
+        <div class="about-row">
+          <span class="k">name</span>
+          <span class="v">Bipin</span>
+        </div>
+        <div class="about-row">
+          <span class="k">role</span>
+          <span class="v">engineer · in training</span>
+        </div>
+        <div class="about-row">
+          <span class="k">stack</span>
+          <span class="v">ROS · Python · C++ · Linux</span>
+        </div>
+        <div class="about-row">
+          <span class="k">interests</span>
+          <span class="v">robotics, automation, data</span>
+        </div>
+        <div class="about-row">
+          <span class="k">status</span>
+          <span class="v lime">▸ open to opportunities</span>
+        </div>
+        <div class="about-row">
+          <span class="k">based</span>
+          <span class="v">London, UK</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============== PROJECTS ============== -->
+  <section id="work">
+    <div class="section-label">02 / selected work</div>
+    <h2 class="section-title">things i've <em>built.</em></h2>
+
+    <div class="projects">
+
+      <article class="project">
+        <div class="p-num">001</div>
+        <div>
+          <h3 class="p-title">Swarm Kinetics</h3>
+          <p class="p-desc">
+            A multi-robot ROS package exploring coordinated movement and decentralized
+            control. Built around custom message types and a launch architecture that
+            survived more than one rewrite.
+          </p>
+        </div>
+        <div class="p-stack">
+          <span class="p-tag">ROS Kinetic</span>
+          <span class="p-tag">Python</span>
+          <span class="p-tag">catkin</span>
+          <span class="p-tag">XML launch</span>
+        </div>
+        <div class="p-arrow-cell"><span class="p-arrow">↗</span></div>
+      </article>
+
+      <article class="project">
+        <div class="p-num">002</div>
+        <div>
+          <h3 class="p-title">Turtlesim Teleop Lab</h3>
+          <p class="p-desc">
+            A teleoperation playground for prototyping ROS publishers, subscribers, and
+            keyboard-driven control loops. Useful sandbox for testing message flow
+            before throwing it at real hardware.
+          </p>
+        </div>
+        <div class="p-stack">
+          <span class="p-tag">ROS</span>
+          <span class="p-tag">turtlesim</span>
+          <span class="p-tag">teleop</span>
+        </div>
+        <div class="p-arrow-cell"><span class="p-arrow">↗</span></div>
+      </article>
+
+      <article class="project">
+        <div class="p-num">003</div>
+        <div>
+          <h3 class="p-title">Python Foundations Curriculum</h3>
+          <p class="p-desc">
+            A self-built progression from core syntax to data analysis, HTML generation,
+            and file automation — every concept delivered as a runnable script.
+            Less theory, more "does it run?"
+          </p>
+        </div>
+        <div class="p-stack">
+          <span class="p-tag">Python</span>
+          <span class="p-tag">CSV</span>
+          <span class="p-tag">automation</span>
+          <span class="p-tag">stdlib</span>
+        </div>
+        <div class="p-arrow-cell"><span class="p-arrow">↗</span></div>
+      </article>
+
+      <article class="project">
+        <div class="p-num">004</div>
+        <div>
+          <h3 class="p-title">Custom Message Pipeline</h3>
+          <p class="p-desc">
+            A small but instructive project on getting custom ROS messages and services
+            to compile cleanly through catkin_make. Mostly a study in workspace
+            structure, sourcing, and not giving up.
+          </p>
+        </div>
+        <div class="p-stack">
+          <span class="p-tag">ROS</span>
+          <span class="p-tag">catkin</span>
+          <span class="p-tag">CMake</span>
+        </div>
+        <div class="p-arrow-cell"><span class="p-arrow">↗</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============== CONTACT ============== -->
+  <section id="contact" class="contact">
+    <div class="section-label">03 / contact</div>
+    <h2 class="section-title">let's <em>talk.</em></h2>
+
+    <div class="contact-grid">
+      <div class="contact-side">
+<pre class="ascii">
+  ┌──────────────┐
+  │  > READY_    │
+  │              │
+  │  ░░░░░░░░░░  │
+  └──────────────┘
+</pre>
+        <p>
+          Open to internship and graduate engineering roles — robotics, Python,
+          systems, anything technical and hands-on. Drop a note and I'll get back
+          within a day or two.
+        </p>
+        <div class="contact-direct">
+          <div><span style="color:var(--ink-faint)">~</span> email · <a href="mailto:bipingc0987@gmail.com">bipingc0987@gmail.com</a></div>
+          <div><span style="color:var(--ink-faint)">~</span> github · <a href="https://github.com/bipingc17">github.com/bipingc17</a></div>
+        </div>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="name">name <span class="req">*</span></label>
+          <input id="name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">email <span class="req">*</span></label>
+          <input id="email" name="email" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="subject">subject</label>
+          <input id="subject" name="subject" type="text">
+        </div>
+        <div class="field">
+          <label for="message">message <span class="req">*</span></label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <div class="form-status" id="formStatus"></div>
+
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
+          send message <span class="arrow">→</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <div>© 2026 bipin</div>
+    <div class="foot-links">
+      <a href="#about">about</a>
+      <a href="#work">work</a>
+      <a href="#contact">contact</a>
+      <a href="#" id="topLink">↑ top</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Smooth scroll to top
+  document.getElementById('topLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Reveal-on-scroll for sections
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('section, .project').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.8s cubic-bezier(0.2,0.8,0.2,1), transform 0.8s cubic-bezier(0.2,0.8,0.2,1)';
+    observer.observe(el);
+  });
+
+  // Contact form (front-end only — wire to a backend or Formspree/Netlify when you deploy)
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = data.get('name')?.toString().trim();
+    const email = data.get('email')?.toString().trim();
+    const message = data.get('message')?.toString().trim();
+
+    if (!name || !email || !message) {
+      status.textContent = '> error: please fill all required fields.';
+      status.style.color = 'var(--accent-2)';
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      status.textContent = '> error: that email looks off.';
+      status.style.color = 'var(--accent-2)';
+      return;
+    }
+
+    status.textContent = '> message queued. (connect a backend to deliver.)';
+    status.style.color = 'var(--accent)';
+    form.reset();
+  });
+
+  // Tiny ambient hover effect on hero title — subtle parallax of accent words
+  const italic = document.querySelector('.hero-title .italic');
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 6;
+    const y = (e.clientY / window.innerHeight - 0.5) * 4;
+    if (italic) italic.style.transform = `translate(${x}px, ${y}px)`;
+  });
+</script>
+
+</body>
+</html>
